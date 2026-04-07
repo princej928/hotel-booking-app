@@ -10,6 +10,7 @@ const AddHotel = () => {
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [price, setPrice] = useState('');
+  const [image, setImage] = useState('');
   const [status, setStatus] = useState({ type: '', message: '' });
   const navigate = useNavigate();
 
@@ -19,7 +20,8 @@ const AddHotel = () => {
       await api.post('/hotels', { 
         name, 
         location, 
-        price: Number(price) 
+        price: Number(price),
+        image
       });
       setStatus({ type: 'success', message: 'Hotel added successfully.' });
       navigate('/');
@@ -73,6 +75,16 @@ const AddHotel = () => {
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="e.g. 150"
+                className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+              />
+            </FormField>
+            <FormField label="Cover Image URL (optional)" id="hotel-image">
+              <input
+                id="hotel-image"
+                type="url"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                placeholder="https://..."
                 className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
               />
             </FormField>

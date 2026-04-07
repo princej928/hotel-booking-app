@@ -32,13 +32,15 @@ router.get('/:id', async (req, res) => {
 
 // @route POST /api/hotels
 router.post('/', protect, adminOnly, async (req, res) => {
-  const { name, location, price } = req.body;
+  const { name, location, price, image, gallery } = req.body;
 
   try {
     const hotel = await Hotel.create({
       name,
       location,
-      price
+      price,
+      image,
+      gallery
     });
     res.status(201).json(hotel);
   } catch (error) {

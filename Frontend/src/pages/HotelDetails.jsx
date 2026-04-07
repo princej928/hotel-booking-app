@@ -56,9 +56,9 @@ export default function HotelDetails() {
 
         <div className="grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="grid gap-4 sm:grid-cols-2">
-            <img src={gallery[0]} alt={hotel.name} className="h-[420px] w-full rounded-[30px] object-cover sm:col-span-2" />
-            <img src={gallery[1]} alt="" className="h-52 w-full rounded-[28px] object-cover" />
-            <img src={gallery[2]} alt="" className="h-52 w-full rounded-[28px] object-cover" />
+            <img src={hotel.gallery?.[0] || hotel.image || gallery[0]} alt={hotel.name} className="h-[420px] w-full rounded-[30px] object-cover sm:col-span-2" />
+            <img src={hotel.gallery?.[1] || gallery[1]} alt="" className="h-52 w-full rounded-[28px] object-cover" />
+            <img src={hotel.gallery?.[2] || gallery[2]} alt="" className="h-52 w-full rounded-[28px] object-cover" />
           </div>
 
           <aside className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.3)] lg:sticky lg:top-24 lg:h-fit">

@@ -4,22 +4,8 @@ const createTransporter = async () => {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_SECURE } = process.env;
 
   if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS) {
-    console.log('No SMTP configuration found. Creating Ethereal testing account...');
-    try {
-      const testAccount = await nodemailer.createTestAccount();
-      return nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false, 
-        auth: {
-          user: testAccount.user,
-          pass: testAccount.pass,
-        },
-      });
-    } catch (err) {
-      console.error('Failed to create Ethereal account', err);
-      return null;
-    }
+    console.log('No SMTP configuration found. Bypassing email sending to use Development OTP instantly...');
+    return null;
   }
 
   return nodemailer.createTransport({

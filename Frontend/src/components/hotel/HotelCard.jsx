@@ -43,7 +43,7 @@ export default function HotelCard({ hotel, isAdmin, onBook, onDelete }) {
         <div className="flex items-end justify-between gap-4">
           <div>
             <div className="text-sm text-slate-500">Starting from</div>
-            <div className="text-2xl font-bold text-slate-900">${hotel.price}</div>
+            <div className="text-2xl font-bold text-slate-900">₹{hotel.price}</div>
             <div className="text-sm text-slate-500">per night</div>
           </div>
 

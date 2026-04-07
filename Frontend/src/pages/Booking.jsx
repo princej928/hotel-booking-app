@@ -178,7 +178,7 @@ const Booking = () => {
                     <tr key={booking._id} className="border-t border-slate-200">
                       <td className="px-5 py-4 font-semibold text-slate-900">{booking.hotel.name}</td>
                       <td className="px-5 py-4 text-slate-600">{booking.hotel.location}</td>
-                      <td className="px-5 py-4 text-slate-600">${booking.hotel.price}</td>
+                      <td className="px-5 py-4 text-slate-600">₹{booking.hotel.price}</td>
                       <td className="px-5 py-4 text-slate-600">{new Date(booking.date).toLocaleDateString()}</td>
                     </tr>
                   ))}

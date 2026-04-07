@@ -63,7 +63,7 @@ export default function HotelDetails() {
 
           <aside className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.3)] lg:sticky lg:top-24 lg:h-fit">
             <p className="text-sm text-slate-500">Average nightly price</p>
-            <p className="mt-2 text-4xl font-extrabold text-slate-900">${hotel.price}</p>
+            <p className="mt-2 text-4xl font-extrabold text-slate-900">₹{hotel.price}</p>
             <p className="mt-1 text-sm text-slate-500">Taxes calculated during booking</p>
 
             <div className="mt-6 space-y-3 rounded-3xl bg-slate-50 p-5 text-sm text-slate-600">

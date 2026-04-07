@@ -28,16 +28,16 @@ export default function BookingSummaryCard({ hotel, selectedDate, count }) {
         </div>
         <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
           <span>Nightly rate</span>
-          <span className="font-semibold text-slate-900">${subtotal || '--'}</span>
+          <span className="font-semibold text-slate-900">₹{subtotal || '--'}</span>
         </div>
         <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
           <span>Taxes & fees</span>
-          <span className="font-semibold text-slate-900">${subtotal ? taxes : '--'}</span>
+          <span className="font-semibold text-slate-900">₹{subtotal ? taxes : '--'}</span>
         </div>
         <div className="mt-4 border-t border-slate-200 pt-4">
           <div className="flex items-center justify-between text-base font-bold text-slate-900">
             <span>Estimated total</span>
-            <span>${subtotal ? total : '--'}</span>
+            <span>₹{subtotal ? total : '--'}</span>
           </div>
         </div>
       </div>

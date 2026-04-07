@@ -143,7 +143,7 @@ const Home = () => {
                   </div>
                   <div className="rounded-2xl bg-emerald-50 px-3 py-2 text-right">
                     <div className="text-sm font-semibold text-emerald-700">From</div>
-                    <div className="text-lg font-bold text-slate-900">$220</div>
+                    <div className="text-lg font-bold text-slate-900">₹22,000</div>
                   </div>
                 </div>
               </div>

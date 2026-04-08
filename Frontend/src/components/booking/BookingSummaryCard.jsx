@@ -1,6 +1,8 @@
-import { getFallbackImage, handleImageError } from '../../utils/hotelHelpers';
+import { getFallbackImage, handleImageError, getFacilities } from '../../utils/hotelHelpers';
 
 export default function BookingSummaryCard({ hotel, checkInDate, checkOutDate, roomType, days, subtotal, taxes, finalTotal }) {
+  const facilities = hotel ? getFacilities(hotel.price) : [];
+
   return (
     <aside className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.28)]">
       <div className="overflow-hidden rounded-3xl">
@@ -19,6 +21,16 @@ export default function BookingSummaryCard({ hotel, checkInDate, checkOutDate, r
           {checkInDate && checkOutDate ? `${new Date(checkInDate).toLocaleDateString()} to ${new Date(checkOutDate).toLocaleDateString()}` : 'Select your check-in and check-out dates.'}
         </p>
       </div>
+
+      {facilities.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {facilities.slice(0, 4).map((tag) => (
+            <span key={tag} className="rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="mt-6 rounded-3xl bg-slate-50 p-5">
         <div className="flex items-center justify-between text-sm text-slate-500">

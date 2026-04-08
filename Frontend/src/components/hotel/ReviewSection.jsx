@@ -32,19 +32,26 @@ const mockReviews = [
 
 export default function ReviewSection() {
   return (
-    <section className="mt-8 rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900">Guest Reviews</h2>
-          <p className="mt-1 text-sm text-slate-500">Real feedback from recent visitors.</p>
-        </div>
-        <div className="flex items-center gap-2 rounded-2xl bg-teal-50 px-4 py-2">
-          <span className="text-2xl font-bold text-teal-800">4.8</span>
-          <span className="text-sm font-medium text-teal-700">Excellent</span>
+    <section className="mt-12 overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-lg lg:mt-16">
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 p-8 sm:px-10 sm:py-12">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-3xl font-extrabold text-white">Guest Experiences</h2>
+            <p className="mt-2 text-lg text-teal-100">See why 98% of visitors recommend this property.</p>
+          </div>
+          <div className="flex w-fit items-center gap-3 rounded-full bg-white/10 px-6 py-3 backdrop-blur-md border border-white/20">
+            <svg className="h-8 w-8 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+            <div>
+              <div className="text-2xl font-bold text-white">4.8</div>
+              <div className="text-xs font-medium uppercase tracking-wider text-amber-200">Excellent</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 p-6 sm:p-8 md:grid-cols-3">
         {mockReviews.map((review) => (
           <div key={review.id} className="group rounded-[24px] border border-slate-100 bg-slate-50 p-6 transition-all duration-300 hover:border-slate-200 hover:bg-white hover:shadow-md">
             <div className="flex items-center gap-4">

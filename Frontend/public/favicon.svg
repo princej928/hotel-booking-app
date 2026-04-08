@@ -1,12 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0f766e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M10 22v-6.57"/>
-  <path d="M12 11h.01"/>
-  <path d="M12 7h.01"/>
-  <path d="M14 15.43V22"/>
-  <path d="M15 16a5 5 0 0 0-6 0"/>
-  <path d="M16 11h.01"/>
-  <path d="M16 7h.01"/>
-  <path d="M8 11h.01"/>
-  <path d="M8 7h.01"/>
-  <rect x="4" y="2" width="16" height="20" rx="2"/>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="14" fill="#0F172A"/>
+  <path d="M18 50V30L32 18L46 30V50" stroke="#0D9488" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="28" y="38" width="8" height="12" fill="#0D9488"/>
+  <rect x="24" y="28" width="5" height="5" fill="#0D9488"/>
+  <rect x="35" y="28" width="5" height="5" fill="#0D9488"/>
+  <rect x="24" y="50" width="16" height="2" fill="#0D9488"/>
 </svg>

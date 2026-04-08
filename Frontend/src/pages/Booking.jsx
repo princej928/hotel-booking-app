@@ -14,6 +14,7 @@ const Booking = () => {
   const [hotelId, setHotelId] = useState('');
   const [date, setDate] = useState('');
   const [status, setStatus] = useState({ type: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const location = useLocation();
   const selectedHotelFromUrl = new URLSearchParams(location.search).get('hotel');
@@ -59,9 +60,11 @@ const Booking = () => {
 
     if (!user._id) {
       setStatus({ type: 'error', message: 'Please log in before creating a booking.' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
+    setIsSubmitting(true);
     try {
       await api.post('/bookings', {
         user: user._id,
@@ -69,10 +72,15 @@ const Booking = () => {
         date
       });
       setStatus({ type: 'success', message: 'Booking created successfully.' });
+      alert('🎉 Booking confirmed successfully! Check your recent bookings below.');
       setDate('');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       fetchBookings();
     } catch (error) {
       setStatus({ type: 'error', message: 'Booking failed. Please try again.' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -139,7 +147,9 @@ const Booking = () => {
                 />
               </FormField>
 
-              <Button type="submit">Confirm booking</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Confirming...' : 'Confirm booking'}
+              </Button>
             </form>
           </div>
 

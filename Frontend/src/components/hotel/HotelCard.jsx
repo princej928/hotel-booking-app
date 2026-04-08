@@ -11,6 +11,7 @@ export default function HotelCard({ hotel, isAdmin, onBook, onDelete }) {
           src={hotel.image || fallbackImage}
           alt={hotel.name}
           className="hotel-card-image h-60 w-full object-cover"
+          loading="lazy"
         />
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
           Guest favorite

@@ -9,6 +9,10 @@ export default function Footer() {
           <p className="mt-3 max-w-md text-sm leading-7 text-slate-500">
             A modern hotel booking frontend with clearer discovery, stronger trust signals, and a much cleaner booking journey.
           </p>
+          <div className="mt-6 flex items-center gap-2">
+            <span className="text-sm text-slate-400">Crafted with passion by</span>
+            <span className="signature-font text-2xl text-teal-600 font-bold -rotate-2 inline-block">Prince</span>
+          </div>
         </div>
 
         <div>

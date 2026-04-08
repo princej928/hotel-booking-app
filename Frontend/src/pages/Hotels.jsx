@@ -6,11 +6,15 @@ import SectionHeading from '../components/common/SectionHeading';
 import EmptyState from '../components/common/EmptyState';
 import HotelCard from '../components/hotel/HotelCard';
 import StatusBanner from '../components/common/StatusBanner';
+import { getStableRating } from '../utils/hotelHelpers';
 
 export default function Hotels() {
   const [hotels, setHotels] = useState([]);
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState('price-asc');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [minRating, setMinRating] = useState('0');
   const [status, setStatus] = useState({ type: '', message: '' });
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -30,9 +34,21 @@ export default function Hotels() {
 
   const filteredHotels = useMemo(() => {
     return [...hotels]
-      .filter((hotel) => `${hotel.name} ${hotel.location}`.toLowerCase().includes(query.toLowerCase()))
-      .sort((a, b) => (sortBy === 'price-asc' ? a.price - b.price : b.price - a.price));
-  }, [hotels, query, sortBy]);
+      .filter((hotel) => {
+        const matchesQuery = `${hotel.name} ${hotel.location}`.toLowerCase().includes(query.toLowerCase());
+        const matchesMin = minPrice === '' || hotel.price >= Number(minPrice);
+        const matchesMax = maxPrice === '' || hotel.price <= Number(maxPrice);
+        const rating = Number(getStableRating(hotel._id, hotel.price));
+        const matchesRating = rating >= Number(minRating);
+        return matchesQuery && matchesMin && matchesMax && matchesRating;
+      })
+      .sort((a, b) => {
+        if (sortBy === 'price-asc') return a.price - b.price;
+        if (sortBy === 'price-desc') return b.price - a.price;
+        if (sortBy === 'rating-desc') return Number(getStableRating(b._id, b.price)) - Number(getStableRating(a._id, a.price));
+        return 0;
+      });
+  }, [hotels, query, sortBy, minPrice, maxPrice, minRating]);
 
   const handleDelete = async (hotelId) => {
     if (!window.confirm('Delete this hotel listing?')) return;
@@ -95,6 +111,43 @@ export default function Hotels() {
             >
               <option value="price-asc">Price: low to high</option>
               <option value="price-desc">Price: high to low</option>
+              <option value="rating-desc">Rating: highest first</option>
+            </select>
+          </label>
+        </div>
+
+        <div className="grid gap-4 rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm sm:grid-cols-3">
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-slate-700">Min Price (₹)</span>
+            <input
+              type="number"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              placeholder="e.g. 2000"
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+            />
+          </label>
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-slate-700">Max Price (₹)</span>
+            <input
+              type="number"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              placeholder="e.g. 15000"
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+            />
+          </label>
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-slate-700">Minimum Rating</span>
+            <select
+              value={minRating}
+              onChange={(e) => setMinRating(e.target.value)}
+              className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+            >
+              <option value="0">Any rating</option>
+              <option value="3.5">3.5+ Good</option>
+              <option value="4.0">4.0+ Very Good</option>
+              <option value="4.5">4.5+ Excellent</option>
             </select>
           </label>
         </div>

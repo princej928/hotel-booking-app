@@ -12,7 +12,10 @@ const Booking = () => {
   const [bookings, setBookings] = useState([]);
   const [hotels, setHotels] = useState([]);
   const [hotelId, setHotelId] = useState('');
-  const [date, setDate] = useState('');
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
+  const [guests, setGuests] = useState(2);
+  const [roomType, setRoomType] = useState('Standard');
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -55,6 +58,22 @@ const Booking = () => {
     [hotels, hotelId]
   );
 
+  const { finalTotal, subtotal, taxes, days } = useMemo(() => {
+    if (!selectedHotel || !checkInDate || !checkOutDate) return { finalTotal: 0, subtotal: 0, taxes: 0, days: 0 };
+    const date1 = new Date(checkInDate);
+    const date2 = new Date(checkOutDate);
+    const timeDiff = date2.getTime() - date1.getTime();
+    let computedDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    if (computedDays <= 0) computedDays = 0;
+    
+    const roomMultipliers = { Standard: 1, Deluxe: 1.5, Suite: 2.5 };
+    let basePrice = selectedHotel.price * computedDays;
+    let multiplier = roomMultipliers[roomType] || 1;
+    let computedSubtotal = Math.round(basePrice * multiplier);
+    let computedTaxes = Math.round(computedSubtotal * 0.12);
+    return { finalTotal: computedSubtotal + computedTaxes, days: computedDays, subtotal: computedSubtotal, taxes: computedTaxes };
+  }, [selectedHotel, checkInDate, checkOutDate, roomType]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -69,11 +88,16 @@ const Booking = () => {
       await api.post('/bookings', {
         user: user._id,
         hotel: hotelId,
-        date
+        checkInDate,
+        checkOutDate,
+        guests,
+        roomType,
+        totalPrice: finalTotal
       });
       setStatus({ type: 'success', message: 'Booking created successfully.' });
       alert('🎉 Booking confirmed successfully! Check your recent bookings below.');
-      setDate('');
+      setCheckInDate('');
+      setCheckOutDate('');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       fetchBookings();
     } catch (error) {
@@ -136,16 +160,56 @@ const Booking = () => {
                 </select>
               </FormField>
 
-              <FormField label="Booking date" id="booking-date">
-                <input
-                  id="booking-date"
-                  type="date"
-                  required
-                  value={date}
-                  onChange={(event) => setDate(event.target.value)}
-                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
-                />
-              </FormField>
+              <div className="grid grid-cols-2 gap-4">
+                <FormField label="Check-in Date" id="booking-checkin">
+                  <input
+                    id="booking-checkin"
+                    type="date"
+                    required
+                    value={checkInDate}
+                    onChange={(event) => setCheckInDate(event.target.value)}
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+                  />
+                </FormField>
+                <FormField label="Check-out Date" id="booking-checkout">
+                  <input
+                    id="booking-checkout"
+                    type="date"
+                    required
+                    value={checkOutDate}
+                    onChange={(event) => setCheckOutDate(event.target.value)}
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+                  />
+                </FormField>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <FormField label="Guests" id="booking-guests">
+                  <input
+                    id="booking-guests"
+                    type="number"
+                    min="1"
+                    max="10"
+                    required
+                    value={guests}
+                    onChange={(event) => setGuests(event.target.value)}
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+                  />
+                </FormField>
+                <FormField label="Room Type" id="booking-room">
+                  <select
+                    id="booking-room"
+                    required
+                    value={roomType}
+                    onChange={(event) => setRoomType(event.target.value)}
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
+                  >
+                    <option value="Standard">Standard</option>
+                    <option value="Deluxe">Deluxe</option>
+                    <option value="Suite">Executive Suite</option>
+                  </select>
+                </FormField>
+              </div>
 
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Confirming...' : 'Confirm booking'}
@@ -153,7 +217,7 @@ const Booking = () => {
             </form>
           </div>
 
-          <BookingSummaryCard hotel={selectedHotel} selectedDate={date} count={hotels.length} />
+          <BookingSummaryCard hotel={selectedHotel} checkInDate={checkInDate} checkOutDate={checkOutDate} roomType={roomType} days={days} subtotal={subtotal} taxes={taxes} finalTotal={finalTotal} />
         </div>
 
         <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.24)] sm:p-8">
@@ -179,8 +243,9 @@ const Booking = () => {
                   <tr className="bg-slate-50">
                     <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Hotel</th>
                     <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Location</th>
-                    <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Price</th>
-                    <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Date</th>
+                    <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Dates</th>
+                    <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Room</th>
+                    <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Total Price</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -188,8 +253,13 @@ const Booking = () => {
                     <tr key={booking._id} className="border-t border-slate-200">
                       <td className="px-5 py-4 font-semibold text-slate-900">{booking.hotel.name}</td>
                       <td className="px-5 py-4 text-slate-600">{booking.hotel.location}</td>
-                      <td className="px-5 py-4 text-slate-600">₹{booking.hotel.price}</td>
-                      <td className="px-5 py-4 text-slate-600">{new Date(booking.date).toLocaleDateString()}</td>
+                      <td className="px-5 py-4 text-sm text-slate-600 whitespace-nowrap">
+                        {booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString() : (booking.date ? new Date(booking.date).toLocaleDateString() : 'N/A')}
+                        <br />
+                        <span className="text-slate-400">to</span> {booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString() : 'N/A'}
+                      </td>
+                      <td className="px-5 py-4 text-slate-600">{booking.roomType || 'Standard'}</td>
+                      <td className="px-5 py-4 font-bold text-slate-900">₹{booking.totalPrice || booking.hotel.price}</td>
                     </tr>
                   ))}
                 </tbody>

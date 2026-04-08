@@ -91,6 +91,29 @@ export default function HotelDetails() {
           </aside>
         </div>
 
+        <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-bold text-slate-900">Available Room Types</h2>
+          <p className="mt-2 text-sm text-slate-500">Choose your perfect accommodation during booking.</p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border border-slate-200 p-5">
+              <h3 className="font-bold text-slate-900">Standard Room</h3>
+              <p className="mt-1 text-sm text-slate-500">Perfect for short stays. Includes essentials.</p>
+              <div className="mt-4 font-semibold text-teal-700">Base Price (₹{hotel.price})</div>
+            </div>
+            <div className="rounded-2xl border border-teal-200 bg-teal-50 p-5">
+              <div className="mb-2 inline-block rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-800">Most Popular</div>
+              <h3 className="font-bold text-slate-900">Deluxe Room</h3>
+              <p className="mt-1 text-sm text-slate-500">More space, better views, premium amenities.</p>
+              <div className="mt-4 font-semibold text-teal-700">1.5x Base Price (₹{(hotel.price * 1.5).toFixed(0)})</div>
+            </div>
+            <div className="rounded-2xl border border-slate-200 p-5 bg-slate-900 text-white">
+              <h3 className="font-bold text-white">Executive Suite</h3>
+              <p className="mt-1 text-sm text-slate-300">Ultimate luxury with separate living area.</p>
+              <div className="mt-4 font-semibold text-teal-300">2.5x Base Price (₹{(hotel.price * 2.5).toFixed(0)})</div>
+            </div>
+          </div>
+        </section>
+
         <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
           <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-bold text-slate-900">Why guests choose this stay</h2>

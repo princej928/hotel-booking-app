@@ -6,13 +6,17 @@ const router = express.Router();
 
 // @route POST /api/bookings
 router.post('/', async (req, res) => {
-  const { user, hotel, date } = req.body;
+  const { user, hotel, checkInDate, checkOutDate, guests, roomType, totalPrice } = req.body;
 
   try {
     const booking = await Booking.create({
       user,
       hotel,
-      date
+      checkInDate,
+      checkOutDate,
+      guests,
+      roomType,
+      totalPrice
     });
     
     // Populate references to send back useful data

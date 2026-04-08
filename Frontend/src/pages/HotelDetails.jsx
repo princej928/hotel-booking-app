@@ -4,6 +4,7 @@ import api from '../api';
 import PageContainer from '../components/layout/PageContainer';
 import Button from '../components/common/Button';
 import EmptyState from '../components/common/EmptyState';
+import { getStableRating, getFacilities, handleImageError, getFallbackImage } from '../utils/hotelHelpers';
 
 const gallery = [
   'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80',
@@ -45,6 +46,9 @@ export default function HotelDetails() {
     );
   }
 
+  const rating = getStableRating(hotel._id, hotel.price);
+  const amenities = [...getFacilities(hotel.price), 'Front desk', 'Air conditioning'];
+
   return (
     <div className="pb-16 pt-8">
       <PageContainer className="space-y-8 px-4 sm:px-6 lg:px-8">
@@ -56,9 +60,9 @@ export default function HotelDetails() {
 
         <div className="grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="grid gap-4 sm:grid-cols-2">
-            <img src={hotel.gallery?.[0] || hotel.image || gallery[0]} alt={hotel.name} className="h-[420px] w-full rounded-[30px] object-cover sm:col-span-2" />
-            <img src={hotel.gallery?.[1] || gallery[1]} alt="" className="h-52 w-full rounded-[28px] object-cover" />
-            <img src={hotel.gallery?.[2] || gallery[2]} alt="" className="h-52 w-full rounded-[28px] object-cover" />
+            <img src={hotel.gallery?.[0] || hotel.image || gallery[0]} alt={hotel.name} className="h-[420px] w-full rounded-[30px] object-cover sm:col-span-2" onError={(e) => handleImageError(e, hotel._id)} />
+            <img src={hotel.gallery?.[1] || gallery[1]} alt="" className="h-52 w-full rounded-[28px] object-cover" onError={(e) => handleImageError(e, hotel._id + '1')} />
+            <img src={hotel.gallery?.[2] || gallery[2]} alt="" className="h-52 w-full rounded-[28px] object-cover" onError={(e) => handleImageError(e, hotel._id + '2')} />
           </div>
 
           <aside className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.3)] lg:sticky lg:top-24 lg:h-fit">
@@ -69,7 +73,7 @@ export default function HotelDetails() {
             <div className="mt-6 space-y-3 rounded-3xl bg-slate-50 p-5 text-sm text-slate-600">
               <div className="flex justify-between">
                 <span>Rating</span>
-                <span className="font-semibold text-slate-900">4.8 / 5</span>
+                <span className="font-semibold text-slate-900">{rating} / 5</span>
               </div>
               <div className="flex justify-between">
                 <span>Check-in</span>
@@ -99,7 +103,7 @@ export default function HotelDetails() {
           <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-bold text-slate-900">Included amenities</h2>
             <div className="mt-5 flex flex-wrap gap-3">
-              {['WiFi', 'Breakfast', 'Parking', 'Air conditioning', 'Room service', 'Front desk'].map((item) => (
+              {amenities.map((item) => (
                 <span key={item} className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700">
                   {item}
                 </span>

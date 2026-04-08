@@ -1,17 +1,18 @@
 import Button from '../common/Button';
-
-const fallbackImage =
-  'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80';
+import { getStableRating, getFacilities, handleImageError, getFallbackImage } from '../../utils/hotelHelpers';
 
 export default function HotelCard({ hotel, isAdmin, onBook, onDelete }) {
+  const rating = getStableRating(hotel._id, hotel.price);
+  const facilities = getFacilities(hotel.price);
   return (
     <article className="hotel-card overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_45px_-28px_rgba(15,23,42,0.28)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_65px_-32px_rgba(15,23,42,0.4)]">
       <div className="relative overflow-hidden">
         <img
-          src={hotel.image || fallbackImage}
+          src={hotel.image || getFallbackImage(hotel._id)}
           alt={hotel.name}
           className="hotel-card-image h-60 w-full object-cover"
           loading="lazy"
+          onError={(e) => handleImageError(e, hotel._id)}
         />
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm">
           Guest favorite
@@ -26,12 +27,12 @@ export default function HotelCard({ hotel, isAdmin, onBook, onDelete }) {
           </div>
           <div className="rounded-2xl bg-amber-50 px-3 py-2 text-center">
             <div className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-700">Rating</div>
-            <div className="text-sm font-bold text-slate-900">4.8</div>
+            <div className="text-sm font-bold text-slate-900">{rating}</div>
           </div>
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {['WiFi', 'Breakfast', 'Parking'].map((tag) => (
+          {facilities.map((tag) => (
             <span
               key={tag}
               className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600"

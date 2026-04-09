@@ -49,19 +49,21 @@ export default function HotelCard({ hotel }) {
       </div>
 
       <div className="grid grid-cols-3 gap-3 md:gap-4 h-48 md:h-64 w-full">
-        <div className="relative h-full w-full">
-          <img src={img1} alt={hotel.name} className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id)}/>
+        <div className="relative h-full w-full overflow-hidden rounded-2xl">
+          <img src={img1} alt={hotel.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" onError={(e) => handleImageError(e, hotel._id)}/>
           <div className="absolute left-3 top-3 flex flex-col gap-2">
             {badges.map((badge, idx) => (
-              <span key={idx} className="rounded-lg bg-black/60 px-2.5 py-1 text-[11px] font-bold tracking-wide text-white backdrop-blur-md shadow-sm">
+              <span key={idx} className="rounded-lg bg-black/60 px-2.5 py-1 text-[11px] font-bold tracking-wide text-white shadow-sm backdrop-blur-md">
                 {badge}
               </span>
             ))}
           </div>
         </div>
-        <img src={img2} alt="Interior" className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id + '1')}/>
-        <div className="relative h-full w-full">
-           <img src={img3} alt="Exterior" className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id + '2')}/>
+        <div className="relative h-full w-full overflow-hidden rounded-2xl">
+          <img src={img2} alt="Interior" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" onError={(e) => handleImageError(e, hotel._id + '1')}/>
+        </div>
+        <div className="relative h-full w-full overflow-hidden rounded-2xl">
+           <img src={img3} alt="Exterior" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" onError={(e) => handleImageError(e, hotel._id + '2')}/>
            <button 
              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(hotel._id); }} 
              className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-slate-400 shadow-sm backdrop-blur transition-all duration-300 hover:scale-110 hover:bg-white hover:text-rose-500 active:scale-95"

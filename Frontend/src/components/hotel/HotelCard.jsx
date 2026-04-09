@@ -32,9 +32,14 @@ export default function HotelCard({ hotel }) {
       onClick={() => navigate('/hotels/' + hotel._id)} 
       className="group relative flex cursor-pointer flex-col overflow-hidden rounded-[24px] bg-white p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 mb-8"
     >
-      <h3 className="mb-4 text-2xl font-bold text-slate-900">
-        {emoji} {displayIndex}. {hotel.name}
-      </h3>
+      <div className="mb-5">
+        <h3 className="text-2xl font-bold text-slate-900 leading-tight">
+          {emoji} {displayIndex}. {hotel.name}
+        </h3>
+        <p className="mt-1.5 font-bold tracking-wide text-teal-600 uppercase text-xs">
+          Core Experience: {hotel.experienceType}
+        </p>
+      </div>
 
       <div className="grid grid-cols-3 gap-3 md:gap-4 h-48 md:h-64 w-full">
         <img src={img1} alt={hotel.name} className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id)}/>

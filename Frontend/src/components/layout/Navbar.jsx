@@ -26,11 +26,11 @@ export default function Navbar() {
         <div className="flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-lg font-bold text-white shadow-sm">
-              S
+              VS
             </div>
             <div>
-              <div className="text-lg font-extrabold tracking-tight text-slate-900">StayScape</div>
-              <div className="text-xs font-medium uppercase tracking-[0.3em] text-slate-400">Hotel booking</div>
+              <div className="text-lg font-extrabold tracking-tight text-slate-900">Velvet Sands</div>
+              <div className="text-xs font-medium uppercase tracking-[0.3em] text-teal-600">Curated Experiences</div>
             </div>
           </Link>
 
@@ -47,7 +47,7 @@ export default function Navbar() {
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
           <nav className="flex flex-wrap items-center gap-2 rounded-full bg-slate-100/80 p-1.5">
             <Link to="/" className={navLinkClass(location.pathname === '/')}>Home</Link>
-            <Link to="/hotels" className={navLinkClass(location.pathname.startsWith('/hotels'))}>Hotels</Link>
+            <Link to="/hotels" className={navLinkClass(location.pathname.startsWith('/hotels'))}>Experiences</Link>
             {token && <Link to="/bookings" className={navLinkClass(location.pathname === '/bookings')}>My Bookings</Link>}
             {user?.isAdmin && <Link to="/add-hotel" className={navLinkClass(location.pathname === '/add-hotel')}>Add Hotel</Link>}
             {user?.isAdmin && <Link to="/admin/users" className={navLinkClass(location.pathname === '/admin/users')}>Users</Link>}

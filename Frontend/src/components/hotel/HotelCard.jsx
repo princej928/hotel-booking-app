@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { handleImageError, getFallbackImage } from '../../utils/hotelHelpers';
+import useWishlist from '../../hooks/useWishlist';
 
 export default function HotelCard({ hotel }) {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
+  const { toggleWishlist, isInWishlist } = useWishlist();
+  const isSaved = isInWishlist(hotel._id);
   
   // Safe fallbacks for data
   const emoji = hotel.emoji || '🏨';
@@ -38,6 +41,14 @@ export default function HotelCard({ hotel }) {
         <img src={img2} alt="Interior" className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id + '1')}/>
         <div className="relative h-full w-full">
            <img src={img3} alt="Exterior" className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id + '2')}/>
+           <button 
+             onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleWishlist(hotel._id); }} 
+             className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-slate-400 shadow-sm backdrop-blur transition-all duration-300 hover:scale-110 hover:bg-white hover:text-rose-500 active:scale-95"
+           >
+             <svg fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`h-6 w-6 transition-colors duration-300 ${isSaved ? 'text-rose-500' : ''}`}>
+               <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+             </svg>
+           </button>
            <div className="absolute bottom-3 right-3 rounded-xl bg-black/60 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-md">
              📸 {totalPhotos}
            </div>

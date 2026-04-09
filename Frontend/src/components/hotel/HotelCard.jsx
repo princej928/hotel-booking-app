@@ -116,7 +116,7 @@ export default function HotelCard({ hotel }) {
         )}
       </div>
 
-      <div className="mt-6 flex items-end justify-between border-t border-slate-100 pt-6">
+      <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
             <del>₹{Math.round(hotel.price * 1.15)}</del> 
@@ -128,14 +128,30 @@ export default function HotelCard({ hotel }) {
           </div>
         </div>
         
-        <button 
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsExpanded(!isExpanded); }}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"
-        >
-          <svg className={`h-5 w-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/hotels/' + hotel._id); }}
+            className="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:text-slate-900 active:scale-95"
+          >
+            View Rooms
+          </button>
+          
+          <button 
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); navigate('/hotels/' + hotel._id); }}
+            className="rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-teal-500 active:scale-95"
+          >
+            View Experience
+          </button>
+
+          <button 
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsExpanded(!isExpanded); }}
+            className="ml-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition-all hover:bg-slate-50 hover:text-slate-900"
+          >
+            <svg className={`h-5 w-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </article>
   );

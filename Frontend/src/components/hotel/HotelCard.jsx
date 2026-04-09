@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { handleImageError, getFallbackImage } from '../../utils/hotelHelpers';
+import { formatCurrency, handleImageError, getFallbackImage } from '../../utils/hotelHelpers';
 import useWishlist from '../../hooks/useWishlist';
 
 export default function HotelCard({ hotel }) {
@@ -121,11 +121,11 @@ export default function HotelCard({ hotel }) {
       <div className="mt-6 flex flex-col gap-4 border-t border-slate-100 pt-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
-            <del>₹{Math.round(hotel.price * 1.15)}</del> 
+            <del>{formatCurrency(Math.round(hotel.price * 1.15))}</del>
             <span className="rounded-md bg-teal-50 px-1.5 py-0.5 font-bold text-teal-700">-15%</span>
           </div>
           <div className="mt-1 flex items-baseline gap-1">
-            <span className="text-xl font-bold text-slate-900">₹{hotel.price}</span>
+            <span className="text-xl font-bold text-slate-900">{formatCurrency(hotel.price)}</span>
             <span className="text-sm text-slate-500">/ night</span>
           </div>
         </div>

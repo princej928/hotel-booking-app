@@ -4,7 +4,7 @@ import api from '../api';
 import PageContainer from '../components/layout/PageContainer';
 import Button from '../components/common/Button';
 import EmptyState from '../components/common/EmptyState';
-import { getStableRating, getFacilities, handleImageError, getFallbackImage } from '../utils/hotelHelpers';
+import { formatCurrency, getStableRating, getFacilities, handleImageError, getFallbackImage } from '../utils/hotelHelpers';
 import useWishlist from '../hooks/useWishlist';
 import ReviewSection from '../components/hotel/ReviewSection';
 
@@ -119,10 +119,10 @@ export default function HotelDetails() {
             <div className="flex items-center justify-between lg:block">
               <div>
                 <p className="hidden text-sm text-slate-500 lg:block">Average nightly price</p>
-                <p className="text-sm font-medium text-slate-500 lg:hidden"><del>₹{oldPrice}</del> <span className="ml-1 font-bold text-teal-600">-15%</span></p>
-                <p className="mt-1 text-3xl font-extrabold text-slate-900 lg:mt-2 lg:text-4xl">₹{hotel.price}</p>
+                <p className="text-sm font-medium text-slate-500 lg:hidden"><del>{formatCurrency(oldPrice)}</del> <span className="ml-1 font-bold text-teal-600">-15%</span></p>
+                <p className="mt-1 text-3xl font-extrabold text-slate-900 lg:mt-2 lg:text-4xl">{formatCurrency(hotel.price)}</p>
                 <p className="text-xs font-medium text-slate-500 lg:hidden">+ taxes</p>
-                <p className="mt-1 hidden text-sm text-slate-500 lg:block"><del>₹{oldPrice}</del> <span className="ml-1 font-bold text-teal-600">-15%</span></p>
+                <p className="mt-1 hidden text-sm text-slate-500 lg:block"><del>{formatCurrency(oldPrice)}</del> <span className="ml-1 font-bold text-teal-600">-15%</span></p>
                 <p className="hidden text-sm text-slate-500 lg:block">Taxes calculated during booking</p>
               </div>
               <Button as={Link} to={`/bookings?hotel=${hotel._id}`} className="px-8 shadow-md lg:hidden">
@@ -191,18 +191,18 @@ export default function HotelDetails() {
             <div className="rounded-2xl border border-slate-200 p-5">
               <h3 className="font-bold text-slate-900">Standard Room</h3>
               <p className="mt-1 text-sm text-slate-500">Perfect for short stays. Includes essentials.</p>
-              <div className="mt-4 font-semibold text-teal-700">Base Price (₹{hotel.price})</div>
+              <div className="mt-4 font-semibold text-teal-700">Base Price ({formatCurrency(hotel.price)})</div>
             </div>
             <div className="rounded-2xl border border-teal-200 bg-teal-50 p-5">
               <div className="mb-2 inline-block rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-800">Most Popular</div>
               <h3 className="font-bold text-slate-900">Deluxe Room</h3>
               <p className="mt-1 text-sm text-slate-500">More space, better views, premium amenities.</p>
-              <div className="mt-4 font-semibold text-teal-700">1.5x Base Price (₹{(hotel.price * 1.5).toFixed(0)})</div>
+              <div className="mt-4 font-semibold text-teal-700">1.5x Base Price ({formatCurrency(Math.round(hotel.price * 1.5))})</div>
             </div>
             <div className="rounded-2xl border border-slate-200 p-5 bg-slate-900 text-white">
               <h3 className="font-bold text-white">Executive Suite</h3>
               <p className="mt-1 text-sm text-slate-300">Ultimate luxury with separate living area.</p>
-              <div className="mt-4 font-semibold text-teal-300">2.5x Base Price (₹{(hotel.price * 2.5).toFixed(0)})</div>
+              <div className="mt-4 font-semibold text-teal-300">2.5x Base Price ({formatCurrency(Math.round(hotel.price * 2.5))})</div>
             </div>
           </div>
         </section>

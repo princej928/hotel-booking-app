@@ -6,6 +6,26 @@ export const getStableRating = (id, price) => {
   return Math.min(Math.max(rating, 3.5), 5.0).toFixed(1);
 };
 
+export const formatCurrency = (value) => {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return 'N/A';
+
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+  }).format(amount);
+};
+
+export const formatDate = (value, options) => {
+  if (!value) return 'N/A';
+
+  const parsedDate = new Date(value);
+  if (Number.isNaN(parsedDate.getTime())) return 'N/A';
+
+  return parsedDate.toLocaleDateString('en-IN', options);
+};
+
 export const getFacilities = (id, price) => {
   const numPrice = Number(price) || 0;
   const hash = id && typeof id === 'string' ? id.charCodeAt(id.length - 1) % 5 : 0;

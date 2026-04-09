@@ -4,13 +4,7 @@ import PageContainer from '../components/layout/PageContainer';
 import SectionHeading from '../components/common/SectionHeading';
 import StatusBanner from '../components/common/StatusBanner';
 import EmptyState from '../components/common/EmptyState';
-
-const formatDate = (value) => {
-  if (!value) return 'N/A';
-
-  const parsedDate = new Date(value);
-  return Number.isNaN(parsedDate.getTime()) ? 'N/A' : parsedDate.toLocaleDateString();
-};
+import { formatCurrency, formatDate } from '../utils/hotelHelpers';
 
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
@@ -65,7 +59,11 @@ export default function AdminBookings() {
                   <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">User</th>
                   <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Email</th>
                   <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Hotel</th>
-                  <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Date</th>
+                  <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Stay</th>
+                  <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Guests</th>
+                  <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Room</th>
+                  <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Total</th>
+                  <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Booked On</th>
                   <th className="px-5 py-4 text-right text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Action</th>
                 </tr>
               </thead>
@@ -80,6 +78,10 @@ export default function AdminBookings() {
                       <br />
                       <span className="text-slate-400">to</span> {formatDate(booking.checkOutDate)}
                     </td>
+                    <td className="px-5 py-4 text-slate-600">{booking.guests || 1}</td>
+                    <td className="px-5 py-4 text-slate-600">{booking.roomType || 'Standard'}</td>
+                    <td className="px-5 py-4 font-semibold text-slate-900">{formatCurrency(booking.totalPrice || booking.hotel?.price)}</td>
+                    <td className="px-5 py-4 text-slate-600">{formatDate(booking.createdAt)}</td>
                     <td className="px-5 py-4 text-right">
                       <button
                         type="button"

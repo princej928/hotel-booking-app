@@ -1,4 +1,4 @@
-import { getFallbackImage, handleImageError, getFacilities } from '../../utils/hotelHelpers';
+import { formatCurrency, formatDate, getFallbackImage, handleImageError, getFacilities } from '../../utils/hotelHelpers';
 
 export default function BookingSummaryCard({ hotel, checkInDate, checkOutDate, roomType, days, subtotal, taxes, finalTotal }) {
   const facilities = hotel ? getFacilities(hotel._id, hotel.price) : [];
@@ -18,7 +18,7 @@ export default function BookingSummaryCard({ hotel, checkInDate, checkOutDate, r
         <p className="text-sm text-slate-500">{hotel?.location || 'Select a hotel'}</p>
         <h2 className="mt-1 text-2xl font-bold text-slate-900">{hotel?.name || 'Booking summary'}</h2>
         <p className="mt-3 text-sm leading-7 text-slate-500">
-          {checkInDate && checkOutDate ? `${new Date(checkInDate).toLocaleDateString()} to ${new Date(checkOutDate).toLocaleDateString()}` : 'Select your check-in and check-out dates.'}
+          {checkInDate && checkOutDate ? `${formatDate(checkInDate)} to ${formatDate(checkOutDate)}` : 'Select your check-in and check-out dates.'}
         </p>
       </div>
 
@@ -43,16 +43,16 @@ export default function BookingSummaryCard({ hotel, checkInDate, checkOutDate, r
         </div>
         <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
           <span>Room Subtotal</span>
-          <span className="font-semibold text-slate-900">{subtotal ? `₹${subtotal}` : '--'}</span>
+          <span className="font-semibold text-slate-900">{subtotal ? formatCurrency(subtotal) : '--'}</span>
         </div>
         <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
           <span>Taxes (12%)</span>
-          <span className="font-semibold text-slate-900">{taxes ? `₹${taxes}` : '--'}</span>
+          <span className="font-semibold text-slate-900">{taxes ? formatCurrency(taxes) : '--'}</span>
         </div>
         <div className="mt-4 border-t border-slate-200 pt-4">
           <div className="flex items-center justify-between text-base font-bold text-slate-900">
             <span>Estimated total</span>
-            <span>{finalTotal ? `₹${finalTotal}` : '--'}</span>
+            <span>{finalTotal ? formatCurrency(finalTotal) : '--'}</span>
           </div>
         </div>
       </div>

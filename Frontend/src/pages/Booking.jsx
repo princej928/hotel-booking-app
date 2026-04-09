@@ -7,6 +7,7 @@ import Button from '../components/common/Button';
 import StatusBanner from '../components/common/StatusBanner';
 import EmptyState from '../components/common/EmptyState';
 import BookingSummaryCard from '../components/booking/BookingSummaryCard';
+import { formatCurrency, formatDate } from '../utils/hotelHelpers';
 
 const Booking = () => {
   const [bookings, setBookings] = useState([]);
@@ -18,9 +19,11 @@ const Booking = () => {
   const [roomType, setRoomType] = useState('Standard');
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [latestBooking, setLatestBooking] = useState(null);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const location = useLocation();
   const selectedHotelFromUrl = new URLSearchParams(location.search).get('hotel');
+  const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
     if (user._id) {
@@ -74,6 +77,17 @@ const Booking = () => {
     return { finalTotal: computedSubtotal + computedTaxes, days: computedDays, subtotal: computedSubtotal, taxes: computedTaxes };
   }, [selectedHotel, checkInDate, checkOutDate, roomType]);
 
+  const validationMessage = useMemo(() => {
+    if (!hotelId) return 'Choose a hotel to continue.';
+    if (!checkInDate || !checkOutDate) return 'Select both check-in and check-out dates.';
+    if (checkInDate < today) return 'Check-in date cannot be in the past.';
+    if (checkOutDate <= checkInDate) return 'Check-out date must be after check-in date.';
+    if (!days) return 'Booking must be for at least one night.';
+    if (Number(guests) < 1 || Number(guests) > 10) return 'Guests must be between 1 and 10.';
+    return '';
+  }, [hotelId, checkInDate, checkOutDate, today, days, guests]);
+  const shouldShowValidationMessage = Boolean(hotelId || checkInDate || checkOutDate);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -83,25 +97,33 @@ const Booking = () => {
       return;
     }
 
+    if (validationMessage) {
+      setStatus({ type: 'error', message: validationMessage });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      await api.post('/bookings', {
+      const { data } = await api.post('/bookings', {
         user: user._id,
         hotel: hotelId,
         checkInDate,
         checkOutDate,
-        guests,
+        guests: Number(guests),
         roomType,
         totalPrice: finalTotal
       });
-      setStatus({ type: 'success', message: 'Booking created successfully.' });
-      alert('🎉 Booking confirmed successfully! Check your recent bookings below.');
+      setStatus({ type: 'success', message: 'Booking confirmed. Your stay now appears in recent bookings below.' });
+      setLatestBooking(data);
       setCheckInDate('');
       setCheckOutDate('');
+      setGuests(2);
+      setRoomType('Standard');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       fetchBookings();
     } catch (error) {
-      setStatus({ type: 'error', message: 'Booking failed. Please try again.' });
+      setStatus({ type: 'error', message: error.response?.data?.message || 'Booking failed. Please try again.' });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setIsSubmitting(false);
@@ -126,6 +148,18 @@ const Booking = () => {
 
         {status.message && <StatusBanner type={status.type}>{status.message}</StatusBanner>}
 
+        {latestBooking && (
+          <div className="rounded-[28px] border border-emerald-200 bg-emerald-50/70 p-5 text-sm text-emerald-900 shadow-sm">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Latest confirmation</p>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2">
+              <span className="font-semibold">{latestBooking.hotel?.name || selectedHotel?.name || 'Hotel booked'}</span>
+              <span>{formatDate(latestBooking.checkInDate)} to {formatDate(latestBooking.checkOutDate)}</span>
+              <span>{latestBooking.roomType || roomType}</span>
+              <span>{formatCurrency(latestBooking.totalPrice || finalTotal)}</span>
+            </div>
+          </div>
+        )}
+
         <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
           <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.28)] sm:p-8">
             <h2 className="text-2xl font-bold text-slate-900">Create a new booking</h2>
@@ -148,7 +182,10 @@ const Booking = () => {
                   id="booking-hotel"
                   required
                   value={hotelId}
-                  onChange={(event) => setHotelId(event.target.value)}
+                  onChange={(event) => {
+                    setHotelId(event.target.value);
+                    setLatestBooking(null);
+                  }}
                   className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
                 >
                   <option value="">Select a hotel</option>
@@ -166,8 +203,17 @@ const Booking = () => {
                     id="booking-checkin"
                     type="date"
                     required
+                    min={today}
                     value={checkInDate}
-                    onChange={(event) => setCheckInDate(event.target.value)}
+                    onChange={(event) => {
+                      const nextCheckInDate = event.target.value;
+                      setCheckInDate(nextCheckInDate);
+                      setLatestBooking(null);
+
+                      if (checkOutDate && checkOutDate <= nextCheckInDate) {
+                        setCheckOutDate('');
+                      }
+                    }}
                     className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
                   />
                 </FormField>
@@ -176,8 +222,12 @@ const Booking = () => {
                     id="booking-checkout"
                     type="date"
                     required
+                    min={checkInDate || today}
                     value={checkOutDate}
-                    onChange={(event) => setCheckOutDate(event.target.value)}
+                    onChange={(event) => {
+                      setCheckOutDate(event.target.value);
+                      setLatestBooking(null);
+                    }}
                     className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
                   />
                 </FormField>
@@ -192,7 +242,10 @@ const Booking = () => {
                     max="10"
                     required
                     value={guests}
-                    onChange={(event) => setGuests(event.target.value)}
+                    onChange={(event) => {
+                      setGuests(event.target.value);
+                      setLatestBooking(null);
+                    }}
                     className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
                   />
                 </FormField>
@@ -201,7 +254,10 @@ const Booking = () => {
                     id="booking-room"
                     required
                     value={roomType}
-                    onChange={(event) => setRoomType(event.target.value)}
+                    onChange={(event) => {
+                      setRoomType(event.target.value);
+                      setLatestBooking(null);
+                    }}
                     className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none transition focus:border-teal-500 focus:ring-4 focus:ring-teal-100"
                   >
                     <option value="Standard">Standard</option>
@@ -211,7 +267,11 @@ const Booking = () => {
                 </FormField>
               </div>
 
-              <Button type="submit" disabled={isSubmitting}>
+              {shouldShowValidationMessage && validationMessage && (
+                <StatusBanner type="info">{validationMessage}</StatusBanner>
+              )}
+
+              <Button type="submit" disabled={isSubmitting || Boolean(validationMessage)}>
                 {isSubmitting ? 'Confirming...' : 'Confirm booking'}
               </Button>
             </form>
@@ -254,12 +314,12 @@ const Booking = () => {
                       <td className="px-5 py-4 font-semibold text-slate-900">{booking.hotel.name}</td>
                       <td className="px-5 py-4 text-slate-600">{booking.hotel.location}</td>
                       <td className="px-5 py-4 text-sm text-slate-600 whitespace-nowrap">
-                        {booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString() : (booking.date ? new Date(booking.date).toLocaleDateString() : 'N/A')}
+                        {formatDate(booking.checkInDate || booking.date)}
                         <br />
-                        <span className="text-slate-400">to</span> {booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString() : 'N/A'}
+                        <span className="text-slate-400">to</span> {formatDate(booking.checkOutDate)}
                       </td>
                       <td className="px-5 py-4 text-slate-600">{booking.roomType || 'Standard'}</td>
-                      <td className="px-5 py-4 font-bold text-slate-900">₹{booking.totalPrice || booking.hotel.price}</td>
+                      <td className="px-5 py-4 font-bold text-slate-900">{formatCurrency(booking.totalPrice || booking.hotel.price)}</td>
                     </tr>
                   ))}
                 </tbody>

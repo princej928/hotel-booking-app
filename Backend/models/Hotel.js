@@ -13,7 +13,11 @@ const hotelSchema = new mongoose.Schema({
     default: 'Standard' 
   },
   isEcoFriendly: { type: Boolean, default: false },
-  curatedExperiences: [{ type: String }]
+  displayIndex: { type: Number, default: 1 },
+  emoji: { type: String, default: '🏨' },
+  experienceBullets: [{ type: String }],
+  activityBullets: [{ type: String }],
+  tourBullets: [{ type: String }]
 });
 
 module.exports = mongoose.model('Hotel', hotelSchema);

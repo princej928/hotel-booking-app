@@ -160,7 +160,7 @@ export default function Hotels() {
             description="Adjust your filters or add a new property to make this catalog more useful."
           />
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="flex flex-col gap-12 max-w-5xl mx-auto w-full">
             {filteredHotels.map((hotel) => (
               <div key={hotel._id} className="space-y-3">
                 <HotelCard hotel={hotel} isAdmin={false} onBook={handleBook} onDelete={() => {}} />

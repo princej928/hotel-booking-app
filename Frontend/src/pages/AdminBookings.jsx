@@ -5,6 +5,13 @@ import SectionHeading from '../components/common/SectionHeading';
 import StatusBanner from '../components/common/StatusBanner';
 import EmptyState from '../components/common/EmptyState';
 
+const formatDate = (value) => {
+  if (!value) return 'N/A';
+
+  const parsedDate = new Date(value);
+  return Number.isNaN(parsedDate.getTime()) ? 'N/A' : parsedDate.toLocaleDateString();
+};
+
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [status, setStatus] = useState({ type: '', message: '' });
@@ -68,7 +75,11 @@ export default function AdminBookings() {
                     <td className="px-5 py-4 font-semibold text-slate-900">{booking.user?.name || 'Deleted user'}</td>
                     <td className="px-5 py-4 text-slate-600">{booking.user?.email || '--'}</td>
                     <td className="px-5 py-4 text-slate-600">{booking.hotel?.name || 'Deleted hotel'}</td>
-                    <td className="px-5 py-4 text-slate-600">{new Date(booking.date).toLocaleDateString()}</td>
+                    <td className="px-5 py-4 text-sm text-slate-600 whitespace-nowrap">
+                      {formatDate(booking.checkInDate || booking.date)}
+                      <br />
+                      <span className="text-slate-400">to</span> {formatDate(booking.checkOutDate)}
+                    </td>
                     <td className="px-5 py-4 text-right">
                       <button
                         type="button"

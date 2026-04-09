@@ -14,6 +14,13 @@ const gallery = [
   'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1200&q=80'
 ];
 
+const nearbyTours = [
+  { id: 1, title: 'Heritage City Walk', image: 'https://images.unsplash.com/photo-1510168393527-1aa33dbbc3e2?auto=format&fit=crop&w=500&q=80', duration: '2 hrs', desc: 'Discover hidden architectural gems with a local expert.', tag: 'Velvet Curated' },
+  { id: 2, title: 'Sunset River Cruise', image: 'https://images.unsplash.com/photo-1544485303-34ea65261d76?auto=format&fit=crop&w=500&q=80', duration: '3 hrs', desc: 'Relaxing evening cruise with live acoustic music.', tag: 'Local Guide' },
+  { id: 3, title: 'Mountain Trail Hike', image: 'https://images.unsplash.com/photo-1551632811-561f3222ef86?auto=format&fit=crop&w=500&q=80', duration: 'Half day', desc: 'A scenic guided hike through beautiful pine forests.', tag: 'Velvet Curated' },
+  { id: 4, title: 'Authentic Cooking Class', image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=500&q=80', duration: '2.5 hrs', desc: 'Master local recipes in a traditional homestay kitchen.', tag: 'Local Guide' },
+];
+
 export default function HotelDetails() {
   const { id } = useParams();
   const [hotels, setHotels] = useState([]);
@@ -95,7 +102,7 @@ export default function HotelDetails() {
             <p className="text-lg text-slate-500">{hotel.location}</p>
           </div>
           <button onClick={() => toggleWishlist(hotel._id)} className="mt-2 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white shadow-sm transition-all hover:scale-105 hover:bg-slate-50">
-            <svg fill={isSaved ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`h-7 w-7 ${isSaved ? 'text-red-500' : 'text-slate-400'}`}>
+            <svg fill={isSaved ? "currentColor" : "none" } viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={`h-7 w-7 ${isSaved ? 'text-red-500' : 'text-slate-400'}`}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
             </svg>
           </button>
@@ -143,6 +150,39 @@ export default function HotelDetails() {
             </Button>
           </aside>
         </div>
+
+        <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-slate-900">Explore Around</h2>
+            <span className="text-sm font-semibold text-teal-600">Nearby Tours</span>
+          </div>
+          <p className="mt-2 text-sm text-slate-500 mb-6">Curated local experiences just steps from your stay.</p>
+          
+          <div className="flex overflow-x-auto gap-4 pb-4 px-1 snap-x snap-mandatory">
+            {nearbyTours.map((tour) => (
+              <div key={tour.id} className="group relative flex-none w-[260px] cursor-pointer flex-col overflow-hidden rounded-[20px] border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 snap-start">
+                <div className="relative h-32 w-full overflow-hidden">
+                  <img src={tour.image} alt={tour.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <span className="absolute top-2 left-2 rounded-md bg-black/60 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-md uppercase tracking-wider">{tour.tag}</span>
+                </div>
+                <div className="p-4 flex flex-col flex-grow">
+                  <div className="flex justify-between items-start mb-1">
+                    <h3 className="font-bold text-slate-900 line-clamp-1">{tour.title}</h3>
+                  </div>
+                  <div className="text-xs font-semibold text-slate-500 mb-2 flex items-center gap-1">
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    {tour.duration}
+                  </div>
+                  <p className="text-xs text-slate-600 line-clamp-1 mb-4">{tour.desc}</p>
+                  
+                  <button className="mt-auto w-full rounded-xl bg-slate-50 border border-slate-200 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-900 hover:text-white active:scale-95">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-2xl font-bold text-slate-900">Available Room Types</h2>

@@ -6,12 +6,42 @@ export const getStableRating = (id, price) => {
   return Math.min(Math.max(rating, 3.5), 5.0).toFixed(1);
 };
 
-export const getFacilities = (price) => {
+export const getFacilities = (id, price) => {
   const numPrice = Number(price) || 0;
-  if (numPrice > 18000) return ['Spa', 'Infinity Pool', 'Fine Dining', 'Butler', 'WiFi'];
-  if (numPrice > 10000) return ['Pool', 'Gym', 'Breakfast', 'WiFi', 'Bar'];
-  if (numPrice > 5000) return ['Breakfast', 'WiFi', 'AC', 'Room Service'];
-  return ['WiFi', 'AC', 'TV', 'Housekeeping'];
+  const hash = id && typeof id === 'string' ? id.charCodeAt(id.length - 1) % 5 : 0;
+  
+  const baseAmenities = ['High-Speed WiFi', 'Climate Control AC'];
+  
+  const cheapPool = [
+    ['Flat-screen TV', 'Daily Housekeeping', 'Free Parking', 'Coffee Maker'],
+    ['Cable TV', 'Daily Cleaning', 'Coffee Maker', 'Wake-up Service'],
+    ['Housekeeping', 'Free Parking', 'Vending Machine', '24/7 Front Desk'],
+    ['HD TV', 'Luggage Storage', 'Lobby Lounge', 'Microwave'],
+    ['Free Parking', 'Housekeeping', 'Pet Friendly', 'Laundry Service']
+  ];
+  
+  const midPool = [
+    ['Outdoor Pool', 'Fitness Center', 'Complimentary Breakfast', 'Mini Bar', 'Room Service'],
+    ['Continental Breakfast', 'Room Service', 'Mini Fridge', 'Executive Lounge', 'Gym'],
+    ['24/7 Gym', 'Hot Breakfast', 'Business Center', 'Cocktail Bar', 'Concierge'],
+    ['Indoor Pool', 'Breakfast Buffet', 'Room Service', 'Concierge', 'Valet Parking'],
+    ['Rooftop Bar', 'Room Service', 'Valet Parking', 'Yoga Studio', 'Smart TV']
+  ];
+  
+  const luxuryPool = [
+    ['Award-winning Spa', 'Infinity Pool', 'Fine Dining Restaurant', 'Personal Butler', 'Helipad Access', 'Limo Service'],
+    ['Luxury Spa', 'Private Pool Cabanas', 'Michelin Star Chef', '24/7 Butler', 'In-room Massage', 'Valet'],
+    ['Rooftop Infinity Pool', 'Fine Dining', 'Dedicated Butler', 'Helicopter Tours', 'Private Golf Course', 'Tennis Court'],
+    ['Wellness Spa', 'Private Beach Access', 'Butler Service', 'Personal Shopper', 'Signature Dining', 'Yacht Access'],
+    ['Heated Private Pool', 'Executive Butler', 'Private Chef', 'Couples Massage', 'Ski-in/Ski-out', 'Chauffeur Service']
+  ];
+
+  let selectedPool = [];
+  if (numPrice > 18000) selectedPool = luxuryPool[hash];
+  else if (numPrice > 5000) selectedPool = midPool[hash];
+  else selectedPool = cheapPool[hash];
+  
+  return [...baseAmenities, ...selectedPool];
 };
 
 const fallbacks = [

@@ -55,7 +55,7 @@ export default function HotelDetails() {
   }
 
   const rating = getStableRating(hotel._id, hotel.price);
-  const amenities = [...getFacilities(hotel.price), 'Front desk', 'Air conditioning', 'Daily housekeeping', 'Room service'];
+  const amenities = getFacilities(hotel._id, hotel.price);
   const isSaved = isInWishlist(hotel._id);
   const oldPrice = Math.round(hotel.price * 1.15);
 

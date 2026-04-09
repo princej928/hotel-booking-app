@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 export default function HotelCard({ hotel, isAdmin, onBook, onDelete }) {
   const navigate = useNavigate();
   const rating = Number(getStableRating(hotel._id, hotel.price));
-  const facilities = getFacilities(hotel.price);
+  const facilities = getFacilities(hotel._id, hotel.price);
   const { toggleWishlist, isInWishlist } = useWishlist();
   const isSaved = isInWishlist(hotel._id);
   const oldPrice = Math.round(hotel.price * 1.15); // Mock 15% discount

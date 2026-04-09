@@ -1,7 +1,7 @@
 import { getFallbackImage, handleImageError, getFacilities } from '../../utils/hotelHelpers';
 
 export default function BookingSummaryCard({ hotel, checkInDate, checkOutDate, roomType, days, subtotal, taxes, finalTotal }) {
-  const facilities = hotel ? getFacilities(hotel.price) : [];
+  const facilities = hotel ? getFacilities(hotel._id, hotel.price) : [];
 
   return (
     <aside className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_22px_55px_-30px_rgba(15,23,42,0.28)]">

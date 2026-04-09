@@ -15,10 +15,10 @@ const gallery = [
 ];
 
 const nearbyTours = [
-  { id: 1, title: 'Heritage City Walk', image: 'https://images.unsplash.com/photo-1510168393527-1aa33dbbc3e2?auto=format&fit=crop&w=500&q=80', duration: '2 hrs', desc: 'Discover hidden architectural gems with a local expert.', tag: 'Velvet Curated' },
-  { id: 2, title: 'Sunset River Cruise', image: 'https://images.unsplash.com/photo-1544485303-34ea65261d76?auto=format&fit=crop&w=500&q=80', duration: '3 hrs', desc: 'Relaxing evening cruise with live acoustic music.', tag: 'Local Guide' },
-  { id: 3, title: 'Mountain Trail Hike', image: 'https://images.unsplash.com/photo-1551632811-561f3222ef86?auto=format&fit=crop&w=500&q=80', duration: 'Half day', desc: 'A scenic guided hike through beautiful pine forests.', tag: 'Velvet Curated' },
-  { id: 4, title: 'Authentic Cooking Class', image: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=500&q=80', duration: '2.5 hrs', desc: 'Master local recipes in a traditional homestay kitchen.', tag: 'Local Guide' },
+  { id: 1, title: 'Heritage City Walk', duration: '2 hrs', desc: 'Discover hidden architectural gems with a local expert.', tag: 'Velvet Curated' },
+  { id: 2, title: 'Sunset River Cruise', duration: '3 hrs', desc: 'Relaxing evening cruise with live acoustic music.', tag: 'Local Guide' },
+  { id: 3, title: 'Mountain Trail Hike', duration: 'Half day', desc: 'A scenic guided hike through beautiful pine forests.', tag: 'Velvet Curated' },
+  { id: 4, title: 'Authentic Cooking Class', duration: '2.5 hrs', desc: 'Master local recipes in a traditional homestay kitchen.', tag: 'Local Guide' },
 ];
 
 export default function HotelDetails() {
@@ -71,6 +71,10 @@ export default function HotelDetails() {
     'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80', // luxurious bathroom
     'https://images.unsplash.com/photo-1512918728675-ed5a9ec8f5d0?auto=format&fit=crop&w=1200&q=80'  // balcony view
   ];
+  const nearbyToursWithImages = nearbyTours.map((tour, index) => ({
+    ...tour,
+    image: displayGallery[index % displayGallery.length] || getFallbackImage(`${hotel._id}-${index}`)
+  }));
 
   const handleOpenGallery = (idx) => {
     setActiveImageIndex(idx);
@@ -159,10 +163,15 @@ export default function HotelDetails() {
           <p className="mt-2 text-sm text-slate-500 mb-6">Curated local experiences just steps from your stay.</p>
           
           <div className="flex overflow-x-auto gap-4 pb-4 px-1 snap-x snap-mandatory">
-            {nearbyTours.map((tour) => (
+            {nearbyToursWithImages.map((tour, index) => (
               <div key={tour.id} className="group relative flex-none w-[260px] cursor-pointer flex-col overflow-hidden rounded-[20px] border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 snap-start">
                 <div className="relative h-32 w-full overflow-hidden">
-                  <img src={tour.image} alt={tour.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img
+                    src={tour.image}
+                    alt={tour.title}
+                    onError={(event) => handleImageError(event, `${hotel._id}-tour-${index}`)}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                   <span className="absolute top-2 left-2 rounded-md bg-black/60 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-md uppercase tracking-wider">{tour.tag}</span>
                 </div>
                 <div className="p-4 flex flex-col flex-grow">

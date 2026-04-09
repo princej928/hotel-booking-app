@@ -22,6 +22,13 @@ export default function HotelCard({ hotel }) {
   const img3 = hotel.gallery?.[1] || getFallbackImage(hotel._id + '2');
   const totalPhotos = (hotel.gallery?.length || 0) + 1;
 
+  // Calculate Tags (Max 2)
+  const badges = [];
+  if (hotel.isEcoFriendly) badges.push('Eco-Friendly 🌱');
+  if (hotel.price > 25000) badges.push('Top Experience ⭐');
+  else if (hotel.price < 20000) badges.push('Best Value 💰');
+  if (badges.length > 2) badges.length = 2; // enforce max 2
+
   // Determine icon for experience based on type or just use standard
   const expIcon = hotel.experienceType === 'Eco-Retreat' ? '🌴' : 
                   hotel.experienceType === 'Heritage' ? '🏛️' : 
@@ -42,7 +49,16 @@ export default function HotelCard({ hotel }) {
       </div>
 
       <div className="grid grid-cols-3 gap-3 md:gap-4 h-48 md:h-64 w-full">
-        <img src={img1} alt={hotel.name} className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id)}/>
+        <div className="relative h-full w-full">
+          <img src={img1} alt={hotel.name} className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id)}/>
+          <div className="absolute left-3 top-3 flex flex-col gap-2">
+            {badges.map((badge, idx) => (
+              <span key={idx} className="rounded-lg bg-black/60 px-2.5 py-1 text-[11px] font-bold tracking-wide text-white backdrop-blur-md shadow-sm">
+                {badge}
+              </span>
+            ))}
+          </div>
+        </div>
         <img src={img2} alt="Interior" className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id + '1')}/>
         <div className="relative h-full w-full">
            <img src={img3} alt="Exterior" className="h-full w-full rounded-2xl object-cover hover:opacity-90 transition" onError={(e) => handleImageError(e, hotel._id + '2')}/>

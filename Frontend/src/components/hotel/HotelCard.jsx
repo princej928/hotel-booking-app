@@ -60,7 +60,14 @@ export default function HotelCard({ hotel }) {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col gap-6">
+      <div className="mt-5 flex flex-wrap gap-2">
+        {hotel.experienceType === 'Heritage' && <><span className="rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-700">🎭 Royal Dinner</span><span className="rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">🖼️ Art Tour</span><span className="rounded-full bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700">🚙 Vintage Drive</span></>}
+        {hotel.experienceType === 'Eco-Retreat' && <><span className="rounded-full bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700">🌴 Tree Climbing</span><span className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">🛶 Canoe Ride</span><span className="rounded-full bg-lime-50 px-3 py-1.5 text-xs font-semibold text-lime-700">🥬 Organic Dining</span></>}
+        {hotel.experienceType === 'Adventure' && <><span className="rounded-full bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700">🏂 Snow Trekking</span><span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">🔥 Bonfire</span><span className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">⛰️ Valley Trip</span></>}
+        {hotel.experienceType === 'Luxury' && <><span className="rounded-full bg-cyan-50 px-3 py-1.5 text-xs font-semibold text-cyan-700">🌊 Sunset Sail</span><span className="rounded-full bg-purple-50 px-3 py-1.5 text-xs font-semibold text-purple-700">🧘 Yoga</span><span className="rounded-full bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700">🏄 Water Sports</span></>}
+      </div>
+
+      <div className="mt-6 flex flex-col gap-6">
         <div>
           <h4 className="flex items-center gap-2 text-lg font-bold text-slate-900">
             {expIcon} Experience:

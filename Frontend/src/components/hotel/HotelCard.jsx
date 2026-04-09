@@ -116,7 +116,18 @@ export default function HotelCard({ hotel }) {
         )}
       </div>
 
-      <div className="mt-6 flex justify-center border-t border-slate-100 pt-6">
+      <div className="mt-6 flex items-end justify-between border-t border-slate-100 pt-6">
+        <div>
+          <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
+            <del>₹{Math.round(hotel.price * 1.15)}</del> 
+            <span className="rounded-md bg-teal-50 px-1.5 py-0.5 font-bold text-teal-700">-15%</span>
+          </div>
+          <div className="mt-1 flex items-baseline gap-1">
+            <span className="text-xl font-bold text-slate-900">₹{hotel.price}</span>
+            <span className="text-sm text-slate-500">/ night</span>
+          </div>
+        </div>
+        
         <button 
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsExpanded(!isExpanded); }}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"

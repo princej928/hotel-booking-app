@@ -61,8 +61,8 @@ export default function HotelDetails() {
 
   const displayGallery = [
     hotel.gallery?.[0] || hotel.image || gallery[0],
-    hotel.gallery?.[1] || gallery[1],
-    hotel.gallery?.[2] || gallery[2]
+    'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80', // luxurious bathroom
+    'https://images.unsplash.com/photo-1512918728675-ed5a9ec8f5d0?auto=format&fit=crop&w=1200&q=80'  // balcony view
   ];
 
   const handleOpenGallery = (idx) => {

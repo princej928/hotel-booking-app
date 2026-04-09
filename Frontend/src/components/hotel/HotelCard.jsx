@@ -1,8 +1,10 @@
 import Button from '../common/Button';
 import { getStableRating, getFacilities, handleImageError, getFallbackImage } from '../../utils/hotelHelpers';
 import useWishlist from '../../hooks/useWishlist';
+import { useNavigate } from 'react-router-dom';
 
 export default function HotelCard({ hotel, isAdmin, onBook, onDelete }) {
+  const navigate = useNavigate();
   const rating = Number(getStableRating(hotel._id, hotel.price));
   const facilities = getFacilities(hotel.price);
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -11,7 +13,7 @@ export default function HotelCard({ hotel, isAdmin, onBook, onDelete }) {
   const highlightTag = rating > 4.5 ? 'Top Rated' : rating >= 4.2 ? 'Great Location' : 'Best Value';
 
   return (
-    <article className="hotel-card group flex flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_45px_-28px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_65px_-32px_rgba(15,23,42,0.4)]">
+    <article onClick={() => navigate('/hotels/' + hotel._id)} className="hotel-card group flex cursor-pointer flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_45px_-28px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_28px_65px_-32px_rgba(15,23,42,0.4)]">
       <div className="relative h-60 w-full overflow-hidden">
         <img
           src={hotel.image || getFallbackImage(hotel._id)}

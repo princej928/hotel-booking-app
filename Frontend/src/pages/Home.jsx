@@ -105,7 +105,7 @@ const Home = () => {
 
                 <div className="flex items-end">
                   <Button className="w-full md:w-auto" onClick={() => navigate('/hotels')}>
-                    Explore stays
+                    Explore 
                   </Button>
                 </div>
               </div>

@@ -1,3 +1,4 @@
+// booking schema of like how the booking part looks like 
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({

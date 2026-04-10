@@ -1,3 +1,4 @@
+// for handling the hotel api like showing hotel details , for admin adding and deleting hotel 
 const express = require('express');
 const Hotel = require('../models/Hotel');
 const Booking = require('../models/Booking');

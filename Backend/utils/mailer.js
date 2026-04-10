@@ -1,3 +1,4 @@
+// for sending the mail to the user 
 const nodemailer = require('nodemailer');
 
 const createTransporter = async () => {

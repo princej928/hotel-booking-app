@@ -1,3 +1,4 @@
+// hotel schema of like how the hotel part looks like 
 const mongoose = require('mongoose');
 
 const hotelSchema = new mongoose.Schema({

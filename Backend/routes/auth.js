@@ -1,3 +1,5 @@
+// for handling the login , logout , register , forgot password , reset password 
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');

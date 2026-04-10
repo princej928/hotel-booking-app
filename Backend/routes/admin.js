@@ -1,3 +1,4 @@
+// for admin only routes like admin can delete user and booking 
 const express = require('express');
 const User = require('../models/User');
 const Booking = require('../models/Booking');

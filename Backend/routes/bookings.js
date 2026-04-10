@@ -1,3 +1,4 @@
+// create the bookinging, view it and  delete the user booking 
 const express = require('express');
 const Booking = require('../models/Booking');
 const { protect, adminOnly } = require('../middleware/authMiddleware');

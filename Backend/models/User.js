@@ -1,3 +1,5 @@
+
+// it explains the user schema and also compares the passwored as well 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 

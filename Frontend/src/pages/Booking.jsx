@@ -56,6 +56,20 @@ const Booking = () => {
     }
   };
 
+  const handleDeleteBooking = async (bookingId) => {
+    if (!window.confirm('Cancel this booking?')) return;
+
+    try {
+      const { data } = await api.delete(`/bookings/${bookingId}`);
+      setBookings((current) => current.filter((booking) => booking._id !== bookingId));
+      setStatus({ type: 'success', message: data.message });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      setStatus({ type: 'error', message: error.response?.data?.message || 'Could not delete this booking.' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const selectedHotel = useMemo(
     () => hotels.find((hotel) => hotel._id === hotelId),
     [hotels, hotelId]
@@ -306,6 +320,7 @@ const Booking = () => {
                     <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Dates</th>
                     <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Room</th>
                     <th className="px-5 py-4 text-left text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Total Price</th>
+                    <th className="px-5 py-4 text-right text-xs font-extrabold uppercase tracking-[0.2em] text-slate-500">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -320,6 +335,15 @@ const Booking = () => {
                       </td>
                       <td className="px-5 py-4 text-slate-600">{booking.roomType || 'Standard'}</td>
                       <td className="px-5 py-4 font-bold text-slate-900">{formatCurrency(booking.totalPrice || booking.hotel.price)}</td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteBooking(booking._id)}
+                          className="rounded-full bg-rose-50 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-100"
+                        >
+                          Cancel
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

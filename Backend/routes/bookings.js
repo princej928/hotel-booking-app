@@ -1,7 +1,7 @@
 // create the bookinging, view it and  delete the user booking 
 const express = require('express');
 const Booking = require('../models/Booking');
-const { protect, adminOnly } = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -45,12 +45,18 @@ router.get('/user/:id', async (req, res) => {
 });
 
 // @route DELETE /api/bookings/:id
-router.delete('/:id', protect, adminOnly, async (req, res) => {
+router.delete('/:id', protect, async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id);
 
     if (!booking) {
       return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    const canDeleteBooking = req.user.isAdmin || booking.user.toString() === req.user.id;
+
+    if (!canDeleteBooking) {
+      return res.status(403).json({ message: 'You can only delete your own bookings' });
     }
 
     await booking.deleteOne();
